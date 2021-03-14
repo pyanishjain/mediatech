@@ -1,0 +1,32 @@
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/main.css'%}" />
+
+<!--    SOFTWARE -->
+<div class="container jumbotron">
+    <form id='plan_form' method="post" class="form-group">
+        {% csrf_token %}
+        <label>reseller id</label>
+        <input id="reseller_id" placeholder="enter reseller userid" type="text">
+        <br>
+        {{ plan_form.as_p }}
+    </form>
+    <!-- download href="{{software_url}}" -->
+    <a style="text-transform: uppercase;" class="btn btn-primary " onclick="fun('{{software_name}}')">Download
+        {{software_name}}</a>
+</div>
+
+<!-- END SOFTWARE -->
+
+{% endblock %}
+
+
+{% block javascript%}
+<script src="{% static 'js/software.js' %}"></script>
+{% endblock %}

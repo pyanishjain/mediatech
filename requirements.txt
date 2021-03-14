@@ -1,0 +1,8 @@
+django==3.0.0
+whitenoise==5.0.1
+gunicorn==19.9.0
+djangorestframework
+python-dateutil
+psycopg2-binary
+dj-database-url
+django_heroku

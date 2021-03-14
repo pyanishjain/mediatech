@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="margin: auto; width:60%;">
+    <h5>Create Token/Sign up</h5>
+    <p style="color: orangered;">If you are reseller please login first</p>
+
+    {% if signup_form.errors %}
+
+    {{signup_form.errors}}
+
+    {% endif %}
+
+    <div class="jumbotron">
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ signup_form.as_p }}
+            {{ profile_form.as_p }}
+            <button class="btn btn-outline-info" type="submit">Sign up</button>
+            <a href="{% url 'login' %}">already have an account Login</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

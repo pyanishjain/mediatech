@@ -1,0 +1,17 @@
+{% include "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+{{form.errors}}
+{% endif %}
+
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock content %}
