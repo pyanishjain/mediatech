@@ -86,16 +86,17 @@ WSGI_APPLICATION = 'auto.wsgi.application'
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-# DATABASE = {
-#     'default': dj_database_url.config()
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
 # }
+
+#NEW
+DATABASE = {
+    'default': dj_database_url.config()
+}
 
 
 #   DATABASES = {
@@ -134,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'ASIA/CALCUTTA'
 
 USE_I18N = True
 
@@ -178,7 +179,6 @@ LOGOUT_REDIRECT_URL = 'login'
 STATIC_URL = '/static/'
 # location where django collect all static files
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# django_heroku.settings(locals())
 
 # location where you will store your static files
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -186,3 +186,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+#new
+django_heroku.settings(locals())
+
