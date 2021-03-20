@@ -5,6 +5,9 @@
 {% block content %}
 <div class="container">
     <h4>Dashboard</h4>
+    <h2><a href="{% url 'signup' %}">Create Token</a></h2>
+    <p>Token Left:{{request.user.reseller.token_count}}</a>
+    <p>Token Sell:{{request.user.reseller.sold_token}}</a>    
     <hr>
 
 
@@ -65,10 +68,55 @@
             </tbody>
             </table>
         </div>
-        <div class="tab-pane fade" id="pills-whatsapp" role="tabpanel" aria-labelledby="pills-whatsapp-tab">Whatsapp
-            stuff</div>
-        <div class="tab-pane fade" id="pills-instagram" role="tabpanel" aria-labelledby="pills-instagram-tab">Instagram
-            stuff</div>
+        <div class="tab-pane fade" id="pills-whatsapp" role="tabpanel" aria-labelledby="pills-whatsapp-tab">
+            {% if whatsapps %}
+                    {% include "dashboard_table.html" %}
+                    <tbody class="text-center">
+                        {% for var in whatsapps %}
+                            <tr>
+                                <td><a href="{% url 'updateTelegram' var.id %}">{{var.profile.user.username}}</a></td>
+                                <td></td>
+                                <td>{{var.DemoDate}}</td>
+                                <td>{{var.isPaid}}</td>
+                                <td>{{var.licenceExpireDate}}</td>
+                                <td></td>
+                                <td>{{var.isActive}}</td>
+                                <td>{{var.date_updated}}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+            {% else %}
+            "Whatsapp stuff"
+            {% endif %}
+            
+        </div>
+        <div class="tab-pane fade" id="pills-instagram" role="tabpanel" aria-labelledby="pills-instagram-tab">
+            
+            {% if instagrams %}
+                    {% include "dashboard_table.html" %}
+                    <tbody class="text-center">
+                        {% for var in instagrams %}
+                            <tr>
+                                <td><a href="{% url 'updateTelegram' var.id %}">{{var.profile.user.username}}</a></td>
+                                <td></td>
+                                <td>{{var.DemoDate}}</td>
+                                <td>{{var.isPaid}}</td>
+                                <td>{{var.licenceExpireDate}}</td>
+                                <td></td>
+                                <td>{{var.isActive}}</td>
+                                <td>{{var.date_updated}}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+            {% else %}
+            "Instagram stuff"
+            {% endif %}
+
+        </div>
 
     </div>
 </div>

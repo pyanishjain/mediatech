@@ -12,20 +12,17 @@
 <div class="container jumbotron">
     <form id='plan_form' method="post" class="form-group">
         {% csrf_token %}
-        <label>reseller id</label>
-        <input id="reseller_id" placeholder="enter reseller userid" type="text">
-        <br>
         {{ plan_form.as_p }}
+        <a href="{% url 'plan_detail' %}">Detail of plan's</a>
     </form>
     <!-- download href="{{software_url}}" -->
-    <a style="text-transform: uppercase;" class="btn btn-primary " onclick="fun('{{software_name}}')">Download
+    <a download href="{{software_url}}" style="text-transform: uppercase;" class="btn btn-primary " onclick="fun('{{software_name}}')">Download
         {{software_name}}</a>
 </div>
 
 <!-- END SOFTWARE -->
 
 {% endblock %}
-
 
 {% block javascript%}
 <script src="{% static 'js/software.js' %}"></script>

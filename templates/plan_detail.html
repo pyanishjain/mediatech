@@ -1,0 +1,32 @@
+{% include "base.html" %}
+
+
+
+{% block content %}
+<div class="container">
+	<div class="row">
+	{% for plan in plans %}
+			
+
+			<div class="col-lg-4">
+				<div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{plan}}</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">Rs {{plan.price}}</h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>{{plan.description}}</li>
+            </ul>
+            
+          </div>
+        </div>
+			</div>
+
+ 
+
+	{% endfor %}
+</div>
+</div>
+
+{% endblock content %}

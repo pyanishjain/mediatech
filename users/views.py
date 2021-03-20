@@ -36,9 +36,6 @@ def signup(request):
 
     if request.method == 'POST':
         signup_form = SignUpForm(request.POST)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
-        #       request.POST.get('password1'))
-        # return HttpResponse("Hi")
         profile_form = UserProfileForm(request.POST)
         if signup_form.is_valid() and profile_form.is_valid():
             user = signup_form.save()
@@ -50,9 +47,16 @@ def signup(request):
             if not request.user.is_anonymous:
                 print(request.user)
                 profile.reseller = request.user.reseller
+                profile.save()
+                return redirect('dashboard')
             else:
+                profile.save()
                 print("Not reseller")
-            profile.save()
+                return redirect('index')
+
+
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4",profile)
+            
 
     context = {'signup_form': signup_form, 'profile_form': profile_form}
     return render(request, 'registration/signup.html', context)
@@ -67,7 +71,7 @@ def dashboard(request):
     print("#######################", telegram)
 
     # print(telegram)
-    context = {'profile': profile, 'telegrams': telegram}
+    context = {'profile': profile, 'telegrams': telegram,'whatsapps':whatsapp,'instagrams':instagram}
     return render(request, 'dashboard.html', context)
 
 
@@ -103,7 +107,13 @@ def updateWithTokenProfile(request):
 def telegramAPI(request):
     profile = Telegram.objects.filter(profile=request.user.profile).first()
     if profile == None:
-        return Response("Please check your token")
+        reseller = request.user.profile.reseller
+        db, created = Telegram.objects.get_or_create(
+            profile=request.user.profile, reseller=reseller)
+        if created:
+            db.DemoDate = datetime.today()
+            db.save()
+            profile = Telegram.objects.filter(profile=request.user.profile).first()
     serializers = TelegramSerializer(instance=profile)
     return Response(serializers.data)
 
@@ -112,7 +122,13 @@ def telegramAPI(request):
 def instagramAPI(request):
     profile = Instagram.objects.filter(profile=request.user.profile).first()
     if profile == None:
-        return Response(status=responses.status.HTTP_201_CREATED)
+        reseller = request.user.profile.reseller
+        db, created = Instagram.objects.get_or_create(
+            profile=request.user.profile, reseller=reseller)
+        if created:
+            db.DemoDate = datetime.today()
+            db.save()
+            profile = Instagram.objects.filter(profile=request.user.profile).first()
     serializers = InstagramSerializer(instance=profile)
     return Response(serializers.data)
 
@@ -121,22 +137,36 @@ def instagramAPI(request):
 def whatsappAPI(request):
     profile = Whatsapp.objects.filter(profile=request.user.profile).first()
     if profile == None:
-        return Response(False)
+        reseller = request.user.profile.reseller
+        db, created = Whatsapp.objects.get_or_create(
+            profile=request.user.profile, reseller=reseller)
+        print(created)
+        if created:
+            db.DemoDate = datetime.today()
+            db.save()
+            profile = Whatsapp.objects.filter(profile=request.user.profile).first()
+    
     serializers = WhatsappSerializer(instance=profile)
     return Response(serializers.data)
 
 
-@api_view(['PUT'])
-def UpdateUserIp(request):
-    profile = Profile.objects.filter(user=request.user).first()
-    serializer = ProfileSerializer(instance=profile, data=request.data)
-    if serializer.is_valid():
-        ip = serializer.save()
-        ip.ip_address = request.data['ip_address']
-        ip.save()
-    else:
-        return Response("Please check Your Token")
-    return Response("Update Sucessfully!")
+
+def updateTelegram(request, id):
+    telegram = Telegram.objects.filter(reseller=request.user.reseller)
+    tel_profile = telegram.get(id=id)
+    form = TelegramForm(instance=tel_profile)
+
+    if request.method == 'POST':
+        form = TelegramForm(request.POST, instance=tel_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        else:
+            print("Some error")
+            return render(request, 'update_telegram.html', {'form': form})
+
+    return render(request, 'update_telegram.html', {'form': form})
+
 
 
 def downloadSoftware(request, name):
@@ -158,22 +188,17 @@ def downloadSoftware(request, name):
     return render(request, 'registration/software.html', context)
 
 
+def plan_detail(request):
+    plans = Plan.objects.all()
+    return render(request,'plan_detail.html',{'plans':plans})
+
+
 @csrf_exempt
 def updateSoftware(request):
     data = json.loads(request.body)
-    print(data)
+    print('#################################################3',data)
     plan_id = int(data['plan'])
-    reseller = data['reseller']
-
-    # reseller_profile = User.objects.get(id=int(reseller))
-
-    # print("FADSFADSFADSFADSFADSFADSFADSFADSF", reseller_profile)
-
-    # print("#%#$%#$%$%^$%^%^$%$%#$%#$%", reseller)
-
     reseller = request.user.profile.reseller
-    print("################################", reseller)
-
     software_name = data['software_name']
     if software_name == 'telegram':
         db, created = Telegram.objects.get_or_create(
@@ -181,39 +206,21 @@ def updateSoftware(request):
 
     if software_name == 'instagram':
         db, created = Instagram.objects.get_or_create(
-            profile=request.user.profile, reseller=reseller_profile)
+            profile=request.user.profile, reseller=reseller)
 
     if software_name == 'whatsapp':
         db, created = Whatsapp.objects.get_or_create(
-            profile=request.user.profile, reseller=reseller_profile)
+            profile=request.user.profile, reseller=reseller)
 
-    print(db)
-    print(created)
-
-    # print("DATABASE$$$$$$$$$$$$$$$$$$$$$$$$$$$", db.duration)
-
-    # print(db)
-    # if created:
     plan = Plan.objects.get(pk=plan_id)
     duration = plan.duration
 
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", duration, type(duration))
-
-    # db.licenceExpireDate = request.user.date_joined + \
-    #     delta.relativedelta(months=int(duration))
-
-    db.isDemo = True
-    # db.duration = int(duration)
-    db.plan = plan
     if created:
+        db.duration = int(duration)
+        db.plan = plan
+        db.isDemo = True
         db.DemoDate = datetime.today()
-
-    # db.locationCount = plan.locationCount
-    # db.keywordCount = plan.keywordCount
-    print('####################################', db.date_updated)
     db.save()
-
-    print(plan)
     return JsonResponse("Hi there!", safe=False)
 
 
@@ -244,23 +251,6 @@ def login_user(request):
         return render(request, 'registration/login.html', context)
 
 
-def updateTelegram(request, id):
-    telegram = Telegram.objects.filter(reseller=request.user.reseller)
-    tel_profile = telegram.get(id=id)
-    form = TelegramForm(instance=tel_profile)
-
-    if request.method == 'POST':
-        form = TelegramForm(request.POST, instance=tel_profile)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-        else:
-            print("Some error")
-            return render(request, 'update_telegram.html', {'form': form})
-
-    return render(request, 'update_telegram.html', {'form': form})
-
-
 
 
 # APIS
@@ -271,6 +261,43 @@ def serverDateAPI(request):
 
 
 @api_view(['GET'])
-def IpAPI(request):
-    ips = Profile.objects.values_list('ip_address').exclude(ip_address=None)
+def IpAPI(request,api):
+    if api == 'whatsapp':
+        ips = Whatsapp.objects.values_list('ip_address').exclude(ip_address=None)
+    if api == 'telegram':
+        ips = Telegram.objects.values_list('ip_address').exclude(ip_address=None)
+    if api == 'instagram':
+        ips = Instagram.objects.values_list('ip_address').exclude(ip_address=None)
     return Response(ips)
+
+
+@api_view(['PUT'])
+def createIP(request,api):
+    if api == 'whatsapp':
+        profile = Whatsapp.objects.filter(profile=request.user.profile).first()
+        serializer = WhatsappSerializer(instance=profile, data=request.data)
+    if api == 'telegram':
+        profile = Telegram.objects.filter(profile=request.user.profile).first()
+        serializer = TelegramSerializer(instance=profile, data=request.data)
+    if api == 'instagram':
+        profile = Instagram.objects.filter(profile=request.user.profile).first()
+        serializer = InstagramSerializer(instance=profile, data=request.data)
+
+    if serializer.is_valid():
+        print(serializer)
+        ip = serializer.save()
+        ip.ip_address = request.data['ip_address']
+        ip.save()
+    else:
+        return Response("Please check Your Token")
+    return Response('hi')
+
+
+@api_view(['GET'])
+def variableAPI(request, api):
+    if api == 'whatsapp':
+        variable = Software.objects.values_list('whatsapp_class_xpath')
+    if api == 'telegram':
+        variable = Software.objects.values_list('telegram_class_xpath')
+
+    return Response(variable)

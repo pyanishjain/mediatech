@@ -16,20 +16,24 @@ urlpatterns = [
     path('profile', views.profileList.as_view(), name='profile'),
     path("updateWithTokenProfile", views.updateWithTokenProfile,
          name='updateWithTokenProfile'),
-    path("UpdateUserIp/", views.UpdateUserIp, name='UpdateUserIp'),
     path("downloadSoftware/<str:name>",
          views.downloadSoftware, name='downloadSoftware'),
+    path("plan_detail/", views.plan_detail, name="plan_detail"),
+    
     path("updateSoftware/", views.updateSoftware, name='updateSoftware'),
     path("login_user/", views.login_user, name="login_user"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("updateTelegram/<int:id>", views.updateTelegram, name="updateTelegram"),
 
     # IPS
+    path("createIP/<str:api>", views.createIP, name='createIP'),
     path("serverDateAPI/", views.serverDateAPI, name="serverDateAPI"),
-    path("IpAPI/", views.IpAPI, name="IpAPI"),
+    path("IpAPI/<str:api>", views.IpAPI, name="IpAPI"),
     path('telegramAPI/', views.telegramAPI, name='telegramAPI'),
     path('whatsappAPI/', views.whatsappAPI, name='whatsappAPI'),
     path('instagramAPI/', views.instagramAPI, name='instagramAPI'),
+
+    path('variableAPI/<str:api>', views.variableAPI, name='variableAPI'),
 
 
 

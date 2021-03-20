@@ -2,7 +2,7 @@ var user = "{{request.user}}";
 var csrftoken = getToken("csrftoken");
 var url = "/updateSoftware/";
 var plan_form = document.getElementById("plan_form");
-var reseller = document.getElementById("reseller_id");
+
 // var indiamart_form = document.getElementById("indiamart_form");
 
 console.log("This is software js script");
@@ -23,15 +23,12 @@ function getToken(name) {
   return cookieValue;
 }
 
-console.log(reseller);
 
 function fun(software_name) {
   var plan = plan_form.plan.value;
-  var resellerText = reseller.value;
-  if (plan == "" || resellerText === "") {
-    alert("Please select your plan and reseller id ");
+  if (plan == "") {
+    alert("Please select your plan");
   } else {
-    console.log("raweraewurier", resellerText, typeof resellerText);
     fetch(url, {
       method: "POST",
       headers: {
@@ -41,7 +38,6 @@ function fun(software_name) {
       body: JSON.stringify({
         plan: plan,
         software_name: software_name,
-        reseller: resellerText,
       }),
     })
       .then((response) => {

@@ -16,7 +16,10 @@
     Your Token don't share it with anyone<br>
     {{token}}
 </div>
-<div class="container">
+
+<div class="jumbotron">
+<div class="row">
+    <div class=" col-lg-4">
 
     <a href="{% url 'downloadSoftware' 'telegram' %}">
         <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
@@ -27,8 +30,8 @@
     </a>
 </div>
 
-<br><br>
-<div class="container">
+
+<div class=" col-lg-4">
 
     <a href="{% url 'downloadSoftware' 'instagram' %}">
         <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
@@ -39,8 +42,8 @@
     </a>
 </div>
 
-<br><br>
-<div class="container">
+
+<div class=" col-lg-4">
 
     <a href="{% url 'downloadSoftware' 'whatsapp' %}">
         <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
@@ -50,5 +53,6 @@
         </div>
     </a>
 </div>
-
+</div>
+</div>
 {% endblock %}

@@ -51,6 +51,7 @@ class TelegramForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
+        exclude = ['confirm_paid',]
 
 
 class WhatsappForm(forms.ModelForm):
@@ -62,6 +63,7 @@ class WhatsappForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
+        exclude = ['confirm_paid',]
 
 
 class InstagramForm(forms.ModelForm):
@@ -73,3 +75,4 @@ class InstagramForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
+        exclude = ['confirm_paid',]
