@@ -2,7 +2,10 @@ var user = "{{request.user}}";
 var csrftoken = getToken("csrftoken");
 var url = "/updateSoftware/";
 var plan_form = document.getElementById("plan_form");
+var download = document.getElementById('download')
 
+var software_url  = document.getElementById('hidden_software_url').value
+console.log(software_url)
 // var indiamart_form = document.getElementById("indiamart_form");
 
 console.log("This is software js script");
@@ -26,9 +29,11 @@ function getToken(name) {
 
 function fun(software_name) {
   var plan = plan_form.plan.value;
+
   if (plan == "") {
     alert("Please select your plan");
   } else {
+    download.setAttribute('href',software_url)
     fetch(url, {
       method: "POST",
       headers: {
