@@ -237,8 +237,6 @@ def plan_detail(request):
 
 
 def contact(request):
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', request.user.profile.reseller)
-    # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', request.user.reseller)
     try:
         if request.user.profile.reseller:
             print(type(request.user.profile.reseller))
@@ -316,6 +314,23 @@ def login_user(request):
 def serverDateAPI(request):
     today = datetime.today().date()
     return Response(today)
+
+
+@api_view(['PUT'])
+def isPaidStatus(request, api):
+    today = datetime.today().date()
+    if api == 'telegram':
+        obj = Telegram.objects.get(profile=request.user.profile)
+    if api == 'whatsapp':
+        obj = Whatsapp.objects.get(profile=request.user.profile)
+    if api == 'instagram':
+        obj = Instagram.objects.get(profile=request.user.profile)
+    if today > obj.licenceExpireDate:
+        obj.isPaid = False
+        obj.licenceExpireDate = None
+        obj.save()
+
+    return Response('ok')
 
 
 @api_view(['GET'])

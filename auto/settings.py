@@ -89,29 +89,29 @@ WSGI_APPLICATION = 'auto.wsgi.application'
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-# NEW
-# DATABASE = {
-#     'default': dj_database_url.config()
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
 # }
 
+# NEW
+DATABASE = {
+    'default': dj_database_url.config()
+}
 
-#   DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': 'dfa4br21gijf9i',
-#             'USER': 'gznsbrlcccfkxq',
-#             'PASSWORD': '8ee677285f3dac522a8eae1f09d59aa497d43c8ced1ccbcdb45c315a0ddc1fa0',
-#             'HOST': 'ec2-3-87-180-131.compute-1.amazonaws.com',
-#             'PORT': '5432',
-#         }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'myproject',
+#         'USER': 'myprojectuser',
+#         'PASSWORD': 'elonMusk@Satna2000sa',
+#         'HOST': 'localhost',
+#         'PORT': '',
 #     }
+# }
 
 
 # Password validation
@@ -188,12 +188,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+
+# MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 
 # new
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# django_heroku.settings(locals())
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+django_heroku.settings(locals())
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

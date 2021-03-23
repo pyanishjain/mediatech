@@ -52,7 +52,7 @@ class TelegramForm(forms.ModelForm):
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
         exclude = ['confirm_paid', 'DemoDate',
-                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+                   'licenceExpireDate', 'reseller', 'profile', 'plan', 'duration']
 
     def __init__(self, *args, **kwargs):
         isPaid_check = kwargs.pop('isPaid_check', False)
@@ -71,7 +71,7 @@ class WhatsappForm(forms.ModelForm):
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
         exclude = ['confirm_paid', 'DemoDate',
-                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+                   'licenceExpireDate', 'reseller', 'profile', 'plan', 'duration']
 
     def __init__(self, *args, **kwargs):
         isPaid_check = kwargs.pop('isPaid_check', False)
@@ -90,7 +90,7 @@ class InstagramForm(forms.ModelForm):
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
         exclude = ['confirm_paid', 'DemoDate',
-                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+                   'licenceExpireDate', 'reseller', 'profile', 'plan', 'duration']
 
     def __init__(self, *args, **kwargs):
         isPaid_check = kwargs.pop('isPaid_check', False)

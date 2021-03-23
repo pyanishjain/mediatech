@@ -72,17 +72,13 @@ class Profile(models.Model):
 
 class Base(models.Model):
     def createLicenceExpireDate(self):
-        duration = self.plan.duration
+        duration = self.duration
         x = self.date_updated + delta.relativedelta(months=int(duration))
         return x
 
     def save(self, *args, **kwargs):
-        today = datetime.today().date()
-        print(type(today), type(self.licenceExpireDate),
-              '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        print(today, self.licenceExpireDate)
-
-        if self.isPaid == True and self.licenceExpireDate < today:
+    
+        if self.isPaid == True and self.licenceExpireDate == None:
             self.licenceExpireDate = self.createLicenceExpireDate()
             try:
                 self.reseller.token_count -= 1
@@ -99,24 +95,22 @@ class Base(models.Model):
         #             self.isPaid = False
 
         # if self.isPaid:
-        #     self.licenceExpireDate = self.createLicenceExpireDate()
-
-        #     try:
-        #         # self.licenceExpireDate.date()
-        #         if self.licenceExpireDate.date() < today:
-        #             print("this time isPaid gona be False",self.isPaid)
-        #             self.isPaid = False
-        #     except:
-        #         # self.licenceExpireDate
-        #         if self.licenceExpireDate < today:
-        #             print("this time isPaid gona be False",self.isPaid)
-        #             self.isPaid = False
+            # try:
+            #     # self.licenceExpireDate.date()
+            #     if self.licenceExpireDate.date() < today:
+            #         print("this time isPaid gona be False",self.isPaid)
+            #         self.isPaid = False
+            # except:
+            #     # self.licenceExpireDate
+            #     if self.licenceExpireDate < today:
+            #         print("this time isPaid gona be False",self.isPaid)
+            #         self.isPaid = False
 
         #     if not self.confirm_paid:
+        #         self.licenceExpireDate = self.createLicenceExpireDate()
         #         try:
         #             self.reseller.token_count -= 1
         #             self.reseller.sold_token += 1
-        #             print('inside isPaid', self.reseller.token_count)
         #         except:
         #             pass
         #         self.confirm_paid = True
@@ -141,8 +135,10 @@ class Telegram(Base):
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
     profile = models.ForeignKey(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    plan = models.ForeignKey(
-        Plan, on_delete=models.CASCADE, null=True, blank=True, default=get_plan)
+    # plan = models.ForeignKey(
+    #     Plan, on_delete=models.CASCADE, null=True, blank=True, default=get_plan)
+
+    duration = models.IntegerField(default=12)
 
     DemoDate = models.DateField(null=True, blank=True, default=timezone.now)
     licenceExpireDate = models.DateField(null=True, blank=True)
@@ -167,8 +163,10 @@ class Whatsapp(Base):
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
     profile = models.ForeignKey(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    plan = models.ForeignKey(
-        Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
+    # plan = models.ForeignKey(
+    #     Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
+
+    duration = models.IntegerField(default=12)
 
     DemoDate = models.DateField(null=True, blank=True, default=timezone.now)
     licenceExpireDate = models.DateField(null=True, blank=True)
@@ -193,8 +191,10 @@ class Instagram(Base):
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
     profile = models.ForeignKey(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    plan = models.ForeignKey(
-        Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
+    # plan = models.ForeignKey(
+    #     Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
+
+    duration = models.IntegerField(default=12)
 
     DemoDate = models.DateField(null=True, blank=True, default=timezone.now)
     licenceExpireDate = models.DateField(null=True, blank=True)

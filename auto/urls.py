@@ -30,6 +30,7 @@ urlpatterns = [
     path("createIP/<str:api>", views.createIP, name='createIP'),
     path("serverDateAPI/", views.serverDateAPI, name="serverDateAPI"),
     path("IpAPI/<str:api>", views.IpAPI, name="IpAPI"),
+    path("isPaidStatus/<str:api>", views.isPaidStatus, name="isPaidStatus"),
     path('telegramAPI/', views.telegramAPI, name='telegramAPI'),
     path('whatsappAPI/', views.whatsappAPI, name='whatsappAPI'),
     path('instagramAPI/', views.instagramAPI, name='instagramAPI'),
