@@ -23,14 +23,25 @@ from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def index(request):
-    user = request.user
-    token = Token.objects.filter(user=user).first()
+    token = ''
+    try:
+        user = request.user
+        token = Token.objects.filter(user=user).first()
+    except Exception as e:
+        print('!!!!!!!!!!!!!!!!!!!!', e)
+    print("$$$$$$$$$$$$$$$$$$$$$$", token)
     return render(request, 'main.html', {'token': token})
 
 
 def signup(request):
+    try:
+        if request.user.reseller.token_count <= 0:
+            return HttpResponse('Please Buy Tokens!!')
+    except:
+        pass
+
     signup_form = SignUpForm()
     profile_form = UserProfileForm()
 
@@ -38,10 +49,14 @@ def signup(request):
         signup_form = SignUpForm(request.POST)
         profile_form = UserProfileForm(request.POST)
         if signup_form.is_valid() and profile_form.is_valid():
+
             user = signup_form.save()
             # Create Token
-            Token.objects.create(user=user)
+            token, created = Token.objects.get_or_create(user=user)
+            # print(token)
+
             profile = profile_form.save(commit=False)
+            profile.token = token
             profile.user = user
             profile.unhash_password = request.POST.get('password1')
             if not request.user.is_anonymous:
@@ -52,11 +67,10 @@ def signup(request):
             else:
                 profile.save()
                 print("Not reseller")
+                user = authenticate(username=request.POST.get(
+                    'username'), password=request.POST.get('password1'))
+                login(request, user)
                 return redirect('index')
-
-
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4",profile)
-            
 
     context = {'signup_form': signup_form, 'profile_form': profile_form}
     return render(request, 'registration/signup.html', context)
@@ -64,14 +78,22 @@ def signup(request):
 
 def dashboard(request):
     profile = Profile.objects.filter(reseller=request.user.reseller)
+    # user_list = [p.user for p in profile ]
+    # tokens =  Token.objects.filter(user__in=user_list)
+    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$!#@!@#!#$!',tokens)
+
+    # tokens = Token.objects.filter(user=request.user)
+    # print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    # print(profile[0].token)
+
+    # print('##$!#@$!#@$!#@$!#@$!@#$!#@$@!#', type(request.user.reseller))
+
     telegram = Telegram.objects.filter(reseller=request.user.reseller)
     whatsapp = Whatsapp.objects.filter(reseller=request.user.reseller)
     instagram = Instagram.objects.filter(reseller=request.user.reseller)
 
-    print("#######################", telegram)
-
-    # print(telegram)
-    context = {'profile': profile, 'telegrams': telegram,'whatsapps':whatsapp,'instagrams':instagram}
+    context = {'profile': profile, 'telegrams': telegram,
+               'whatsapps': whatsapp, 'instagrams': instagram}
     return render(request, 'dashboard.html', context)
 
 
@@ -113,7 +135,8 @@ def telegramAPI(request):
         if created:
             db.DemoDate = datetime.today()
             db.save()
-            profile = Telegram.objects.filter(profile=request.user.profile).first()
+            profile = Telegram.objects.filter(
+                profile=request.user.profile).first()
     serializers = TelegramSerializer(instance=profile)
     return Response(serializers.data)
 
@@ -128,7 +151,8 @@ def instagramAPI(request):
         if created:
             db.DemoDate = datetime.today()
             db.save()
-            profile = Instagram.objects.filter(profile=request.user.profile).first()
+            profile = Instagram.objects.filter(
+                profile=request.user.profile).first()
     serializers = InstagramSerializer(instance=profile)
     return Response(serializers.data)
 
@@ -144,20 +168,40 @@ def whatsappAPI(request):
         if created:
             db.DemoDate = datetime.today()
             db.save()
-            profile = Whatsapp.objects.filter(profile=request.user.profile).first()
-    
+            profile = Whatsapp.objects.filter(
+                profile=request.user.profile).first()
+
     serializers = WhatsappSerializer(instance=profile)
     return Response(serializers.data)
 
 
+def update(request, id, api):
+    if api == 'telegram':
+        telegram = Telegram.objects.filter(reseller=request.user.reseller)
+        profile = telegram.get(id=id)
+        form = TelegramForm(instance=profile, isPaid_check=profile.isPaid)
 
-def updateTelegram(request, id):
-    telegram = Telegram.objects.filter(reseller=request.user.reseller)
-    tel_profile = telegram.get(id=id)
-    form = TelegramForm(instance=tel_profile)
+    if api == 'whatsapp':
+        whatsapp = Whatsapp.objects.filter(reseller=request.user.reseller)
+        profile = whatsapp.get(id=id)
+        form = WhatsappForm(instance=profile, isPaid_check=profile.isPaid)
+
+    if api == 'instagram':
+        instagram = Instagram.objects.filter(reseller=request.user.reseller)
+        profile = telegram.get(id=id)
+        form = InstagramForm(instance=profile, isPaid_check=profile.isPaid)
 
     if request.method == 'POST':
-        form = TelegramForm(request.POST, instance=tel_profile)
+        if api == 'telegram':
+            form = TelegramForm(request.POST, instance=profile,
+                                isPaid_check=profile.isPaid)
+        if api == 'whatsapp':
+            form = WhatsappForm(request.POST, instance=profile,
+                                isPaid_check=profile.isPaid)
+        if api == 'instagram':
+            form = InstagramForm(request.POST, instance=profile,
+                                 isPaid_check=profile.isPaid)
+
         if form.is_valid():
             form.save()
             return redirect('dashboard')
@@ -166,7 +210,6 @@ def updateTelegram(request, id):
             return render(request, 'update_telegram.html', {'form': form})
 
     return render(request, 'update_telegram.html', {'form': form})
-
 
 
 def downloadSoftware(request, name):
@@ -190,13 +233,30 @@ def downloadSoftware(request, name):
 
 def plan_detail(request):
     plans = Plan.objects.all()
-    return render(request,'plan_detail.html',{'plans':plans})
+    return render(request, 'plan_detail.html', {'plans': plans})
+
+
+def contact(request):
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', request.user.profile.reseller)
+    # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', request.user.reseller)
+    try:
+        if request.user.profile.reseller:
+            print(type(request.user.profile.reseller))
+
+            contacts = Reseller.objects.filter(
+                reseller=request.user.profile.reseller.reseller)
+            return render(request, 'contact.html', {'contacts': contacts})
+    except Exception as e:
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', e)
+
+    contacts = Contact.objects.all()
+    return render(request, 'contact.html', {'contacts': contacts})
 
 
 @csrf_exempt
 def updateSoftware(request):
     data = json.loads(request.body)
-    print('#################################################3',data)
+    print('#################################################3', data)
     plan_id = int(data['plan'])
     reseller = request.user.profile.reseller
     software_name = data['software_name']
@@ -251,8 +311,6 @@ def login_user(request):
         return render(request, 'registration/login.html', context)
 
 
-
-
 # APIS
 @api_view(['GET'])
 def serverDateAPI(request):
@@ -261,18 +319,21 @@ def serverDateAPI(request):
 
 
 @api_view(['GET'])
-def IpAPI(request,api):
+def IpAPI(request, api):
     if api == 'whatsapp':
-        ips = Whatsapp.objects.values_list('ip_address').exclude(ip_address=None)
+        ips = Whatsapp.objects.values_list(
+            'ip_address').exclude(ip_address=None)
     if api == 'telegram':
-        ips = Telegram.objects.values_list('ip_address').exclude(ip_address=None)
+        ips = Telegram.objects.values_list(
+            'ip_address').exclude(ip_address=None)
     if api == 'instagram':
-        ips = Instagram.objects.values_list('ip_address').exclude(ip_address=None)
+        ips = Instagram.objects.values_list(
+            'ip_address').exclude(ip_address=None)
     return Response(ips)
 
 
 @api_view(['PUT'])
-def createIP(request,api):
+def createIP(request, api):
     if api == 'whatsapp':
         profile = Whatsapp.objects.filter(profile=request.user.profile).first()
         serializer = WhatsappSerializer(instance=profile, data=request.data)
@@ -280,7 +341,8 @@ def createIP(request,api):
         profile = Telegram.objects.filter(profile=request.user.profile).first()
         serializer = TelegramSerializer(instance=profile, data=request.data)
     if api == 'instagram':
-        profile = Instagram.objects.filter(profile=request.user.profile).first()
+        profile = Instagram.objects.filter(
+            profile=request.user.profile).first()
         serializer = InstagramSerializer(instance=profile, data=request.data)
 
     if serializer.is_valid():

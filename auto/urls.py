@@ -19,11 +19,12 @@ urlpatterns = [
     path("downloadSoftware/<str:name>",
          views.downloadSoftware, name='downloadSoftware'),
     path("plan_detail/", views.plan_detail, name="plan_detail"),
-    
+    path("contact/", views.contact, name="contact"),
+
     path("updateSoftware/", views.updateSoftware, name='updateSoftware'),
     path("login_user/", views.login_user, name="login_user"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("updateTelegram/<int:id>", views.updateTelegram, name="updateTelegram"),
+    path("update/<int:id>/<str:api>", views.update, name="update"),
 
     # IPS
     path("createIP/<str:api>", views.createIP, name='createIP'),

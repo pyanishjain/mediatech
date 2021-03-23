@@ -1,0 +1,9 @@
+{% include "base.html" %}
+
+
+{% for c in contacts %}
+<div class="container">
+    <p>ContactNo:{{c.phoneNo}}</p>
+    <p>Detail{{c.detail}}</p>
+</div>
+{% endfor %}

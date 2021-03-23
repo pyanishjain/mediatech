@@ -10,15 +10,23 @@
 
 <!--    SOFTWARE -->
 <div class="container jumbotron">
-    <form id='plan_form' method="post" class="form-group">
+    <!-- <form id='plan_form' method="post" class="form-group">
         {% csrf_token %}
         {{ plan_form.as_p }}
         <a href="{% url 'plan_detail' %}">Detail of plan's</a>
-    </form>
+    </form> -->
     <!-- download href="{{software_url}}" -->
-    <a download id="download" style="text-transform: uppercase;" class="btn btn-primary " onclick="fun('{{software_name}}')">Download
+    <a download="" download id="download" style="text-transform: uppercase;" class="btn btn-primary "
+        onclick="fun('{{software_name}}')" href="{{software_url}}">Download
         {{software_name}}</a>
     <input type="hidden" value="{{software_url}}" id="hidden_software_url">
+
+
+    <a download herf="http://127.0.0.1:8000/media/software/melyna-valle-C1m_GpO0XG0-unsplash.jpg">hi</a>
+
+    <a download href="C:\Users\ANISH JAIN\Documents\BulkSenders\num.csv"><img style="width: 100px; height:100px;"
+            src="http://127.0.0.1:8000/media/software/melyna-valle-C1m_GpO0XG0-unsplash.jpg"></a>
+
 </div>
 
 <!-- END SOFTWARE -->
@@ -28,5 +36,5 @@
 
 {% block javascript%}
 
-<script src="{% static 'js/software.js' %}"></script>
+<!-- <script src="{% static 'js/software.js' %}"></script> -->
 {% endblock %}

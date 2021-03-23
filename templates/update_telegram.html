@@ -6,12 +6,33 @@
 {{form.errors}}
 {% endif %}
 
+
 <div class="container">
     <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit" class="btn btn-primary">Submit</button>
+    	{% csrf_token %}
+        {{form.as_p}} 
+        <button type="Submit" class="btn btn-primary">Submit</button>
+        <!-- <a onclick = "HI()" class="btn btn-primary">Submit</a> -->
+        
     </form>
 </div>
+
+<script type="text/javascript">
+	var isPaid = document.getElementById('id_isPaid').attributes['checked']
+	var pPaid = document.getElementById('IsPaid')
+	console.log(isPaid)
+	if (isPaid !== 'undefined'){
+		pPaid.setAttribute('hidden','')
+	}
+
+	function HI () {
+		var plan = document.getElementById('id_plan').value;
+		console.log(plan)
+		if (plan == "") {
+    		alert("Please select your plan");
+		} 
+	}
+ 
+</script>
 
 {% endblock content %}

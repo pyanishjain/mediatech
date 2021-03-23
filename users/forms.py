@@ -51,7 +51,14 @@ class TelegramForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
-        exclude = ['confirm_paid',]
+        exclude = ['confirm_paid', 'DemoDate',
+                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+
+    def __init__(self, *args, **kwargs):
+        isPaid_check = kwargs.pop('isPaid_check', False)
+        super(TelegramForm, self).__init__(*args, **kwargs)
+        if isPaid_check:
+            del self.fields['isPaid']
 
 
 class WhatsappForm(forms.ModelForm):
@@ -63,7 +70,14 @@ class WhatsappForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
-        exclude = ['confirm_paid',]
+        exclude = ['confirm_paid', 'DemoDate',
+                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+
+    def __init__(self, *args, **kwargs):
+        isPaid_check = kwargs.pop('isPaid_check', False)
+        super(WhatsappForm, self).__init__(*args, **kwargs)
+        if isPaid_check:
+            del self.fields['isPaid']
 
 
 class InstagramForm(forms.ModelForm):
@@ -75,4 +89,11 @@ class InstagramForm(forms.ModelForm):
                    'DemoDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    'licenceExpireDate': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
                    }
-        exclude = ['confirm_paid',]
+        exclude = ['confirm_paid', 'DemoDate',
+                   'licenceExpireDate', 'reseller', 'profile', 'plan']
+
+    def __init__(self, *args, **kwargs):
+        isPaid_check = kwargs.pop('isPaid_check', False)
+        super(InstagramForm, self).__init__(*args, **kwargs)
+        if isPaid_check:
+            del self.fields['isPaid']
