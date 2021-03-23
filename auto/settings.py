@@ -30,8 +30,8 @@ SECRET_KEY = 'm3f%!b%$5eug*lq@4i)3d@y5g)^7#o7n@feox2l83(ph77+v=&'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # new
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'auto.wsgi.application'
 #     }
 # }
 
-#NEW
+# NEW
 DATABASE = {
     'default': dj_database_url.config()
 }
@@ -194,4 +194,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # new
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 django_heroku.settings(locals())
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
