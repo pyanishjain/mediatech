@@ -188,7 +188,7 @@ def update(request, id, api):
 
     if api == 'instagram':
         instagram = Instagram.objects.filter(reseller=request.user.reseller)
-        profile = telegram.get(id=id)
+        profile = instagram.get(id=id)
         form = InstagramForm(instance=profile, isPaid_check=profile.isPaid)
 
     if request.method == 'POST':
