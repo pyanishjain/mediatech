@@ -89,17 +89,17 @@ WSGI_APPLICATION = 'auto.wsgi.application'
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # NEW
-# DATABASE = {
-#     'default': dj_database_url.config()
-# }
+DATABASE = {
+    'default': dj_database_url.config()
+}
 
 
 # DATABASES = {
@@ -194,6 +194,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 
 # new
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# django_heroku.settings(locals())
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+django_heroku.settings(locals())
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
