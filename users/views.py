@@ -9,6 +9,7 @@ from rest_framework import generics
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, HttpResponse
+
 from .forms import *
 import dateutil.relativedelta as delta
 from django.contrib.auth.models import User
@@ -21,6 +22,55 @@ from django.http import JsonResponse
 from datetime import datetime
 
 from django.views.decorators.csrf import csrf_exempt
+
+from django.http import HttpResponse
+import csv
+
+
+@login_required(login_url='login')
+# @api_view(['GET'])
+def exportToCSV(request, api):
+    if api == 'profile':
+        obj = Profile.objects.filter(reseller=request.user.reseller)
+        data = obj.values_list('token', 'unhash_password', 'phoneNo')
+    if api == 'telegram':
+        obj = Telegram.objects.filter(reseller=request.user.reseller)
+    if api == 'whatsapp':
+        obj = Whatsapp.objects.filter(reseller=request.user.reseller)
+    if api == 'instagram':
+        obj = Instagram.objects.filter(reseller=request.user.reseller)
+
+    # print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', obj)
+    # return JsonResponse(api, safe=False)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{api}.csv"'
+
+    writer = csv.writer(response)
+    # writer.writerow(['token', 'user', 'phoneNo', 'unhash_password', 'address',
+    #                  'registration_date', 'registration_upto', 'Subscription Type', 'Batch'])
+    # members = user_obj.values_list('name', 'mobile_number', 'created', 'email',
+    #                                'address', 'registration_date', 'registration_upto', 'subscription_type', 'batch')
+    # for user in members:
+    # writer.writerow(user)
+    # data = obj.values_list('token', 'user', 'phoneNo', '', '')
+    # print(data)
+    # print(obj)
+    # profile -> 'token', 'unhash_password', 'phoneNo'
+
+    # id, instagram, phoneNo, reseller, reseller_id, telegram, token, token_id, unhash_password, user, user_id, whatsapp
+    # telegram -> licenceExpireDate,DemoDate,isActive,isPaid,
+    #  DemoDate, base_ptr, base_ptr_id, confirm_paid, date_updated, duration, id, ip_address, isActive, isPaid, licenceExpireDate, profile, profile_id, reseller, reseller_id
+
+    # data = obj.values_list('token', 'unhash_password', 'phoneNo', 'user')
+    # print(data)
+
+    # print(tokens[0][1].)
+    # writer.writerow(['Token', 'UserName','Password','PhoneNo','IsActive','DateUpdate'])
+    # writer.writerow(['anish', '741258963'])
+    # print(response)
+    # return response
+    return HttpResponse('hi')
 
 
 # @login_required(login_url='login')
@@ -80,16 +130,6 @@ def signup(request):
 
 def dashboard(request):
     profile = Profile.objects.filter(reseller=request.user.reseller)
-    # user_list = [p.user for p in profile ]
-    # tokens =  Token.objects.filter(user__in=user_list)
-    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$!#@!@#!#$!',tokens)
-
-    # tokens = Token.objects.filter(user=request.user)
-    # print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-    # print(profile[0].token)
-
-    # print('##$!#@$!#@$!#@$!#@$!@#$!#@$@!#', type(request.user.reseller))
-
     telegram = Telegram.objects.filter(reseller=request.user.reseller)
     whatsapp = Whatsapp.objects.filter(reseller=request.user.reseller)
     instagram = Instagram.objects.filter(reseller=request.user.reseller)

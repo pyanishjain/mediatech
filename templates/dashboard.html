@@ -1,7 +1,5 @@
 {% include "base.html" %}
 
-
-
 {% block content %}
 <div class="container">
     <h4>Dashboard</h4>
@@ -9,7 +7,7 @@
     <p>Token Left:{{request.user.reseller.token_count}}</a>
     <p>Token Sell:{{request.user.reseller.sold_token}}</a>
         <hr>
-
+    <p><a id="toCsv" class="btn btn-warning">Export to CSV</a></p>
 
 
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -26,18 +24,13 @@
                 aria-controls="pills-whatsapp" aria-selected="false">Whatsapp</a>
         </li>
         <li class="nav-item" role='presentation'>
-            <a class="nav-link" id="pill-instagram-tab" data-toggle="pill" href="#pills-instagram" role="tab"
+            <a class="nav-link" id="pills-instagram-tab" data-toggle="pill" href="#pills-instagram" role="tab"
                 aria-controls="pills-instagram" aria-selected="false">Instagram</a>
 
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
-
-
-
-
-
 
             {% include "dashboard_table.html" %}
             <tbody class="text-center">
@@ -131,5 +124,65 @@
 
     </div>
 </div>
+
+
+<script>
+    //var user = "{{request.user}}"
+    var csvUrl = "/exportToCSV/profile"
+    var base_url = "/exportToCSV/";
+    var api = 'profile';
+    var user_tab = document.getElementById('pills-users-tab')
+    var telegram_tab = document.getElementById('pills-telegram-tab')
+    var whatsapp_tab = document.getElementById('pills-whatsapp-tab')
+    var instagram_tab = document.getElementById('pills-instagram-tab')
+    var toCsv = document.getElementById('toCsv')
+    var csvForm = document.getElementById('csvForm')
+
+    user_tab.addEventListener('click', function () {
+        //alert('user')
+        api = 'profile'
+        var url = base_url + api
+        //toCsv.setAttribute('href', url)
+    })
+
+    telegram_tab.addEventListener('click', function () {
+        //alert('telegram')
+        api = 'telegram'
+        var url = base_url + api
+        //toCsv.setAttribute('href', url)
+    })
+
+    whatsapp_tab.addEventListener('click', function () {
+        //alert('whatsapp')
+        api = 'whatsapp'
+        var url = base_url + api
+        //toCsv.setAttribute('href', url)
+    })
+
+    instagram_tab.addEventListener('click', function () {
+        //alert('instagram')
+        api = 'instagram'
+        var url = base_url + api
+        //toCsv.setAttribute('href', url)
+    })
+
+    toCsv.addEventListener('click', function () {
+
+        console.log(api)
+        var url = base_url + api
+        console.log(url)
+        toCsv.setAttribute('href', url)
+        //toCsv.click()
+        //fetch(url, {
+        //  method: "GET"
+        //})
+
+        //location.reload();
+    })
+
+
+
+
+</script>
 
 {% endblock content %}

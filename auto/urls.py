@@ -25,8 +25,9 @@ urlpatterns = [
     path("login_user/", views.login_user, name="login_user"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("update/<int:id>/<str:api>", views.update, name="update"),
+    path("exportToCSV/<str:api>", views.exportToCSV, name="exportToCSV"),
 
-    # IPS
+    # AIPS
     path("createIP/<str:api>", views.createIP, name='createIP'),
     path("serverDateAPI/", views.serverDateAPI, name="serverDateAPI"),
     path("IpAPI/<str:api>", views.IpAPI, name="IpAPI"),
