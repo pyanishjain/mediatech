@@ -126,8 +126,8 @@ def save_reseller_token_count(sender, instance, **kwargs):
     #     instance.profile.save()
 
 
-def get_plan():
-    return Plan.objects.get(id=1)
+# def get_plan():
+#     return Plan.objects.get(id=1)
 
 
 class Telegram(Base):
