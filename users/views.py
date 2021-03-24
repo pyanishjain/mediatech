@@ -38,7 +38,9 @@ def index(request):
 def signup(request):
     try:
         if request.user.reseller.token_count <= 0:
-            return HttpResponse('Please Buy Tokens!!')
+            return HttpResponse('<h1 style="text-align:center;">Your Have 0 Token LEFT  Please Contact </h1')
+        if not request.user.reseller.isActive:
+            return HttpResponse('<h1 style="text-align:center;">Your Account Is Deactive Please Contact </h1')
     except:
         pass
 
