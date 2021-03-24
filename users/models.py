@@ -44,7 +44,7 @@ class Reseller(models.Model):
     token_count = models.IntegerField(default=10)
     sold_token = models.IntegerField(default=0)
     months = models.IntegerField(default=0)
-    phoneNo = models.IntegerField(null=True, blank=True)
+    phoneNo = models.CharField(null=True, max_length=10, blank=True)
     isActive = models.BooleanField(default=True)
 
     def __str__(self):
@@ -57,7 +57,7 @@ class Profile(models.Model):
     reseller = models.ForeignKey(
         Reseller, on_delete=models.CASCADE, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    phoneNo = models.IntegerField(null=True)
+    phoneNo = models.CharField(null=True, max_length=10, blank=True)
     unhash_password = models.CharField(null=True, blank=True, max_length=256)
 
     def __str__(self):
@@ -77,7 +77,7 @@ class Base(models.Model):
         return x
 
     def save(self, *args, **kwargs):
-    
+
         if self.isPaid == True and self.licenceExpireDate == None:
             self.licenceExpireDate = self.createLicenceExpireDate()
             try:
