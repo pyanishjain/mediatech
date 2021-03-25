@@ -1,58 +1,61 @@
-{% extends 'base.html' %}
-
+{% include "base.html" %}
 {% block content %}
-
 
 <style>
     a {
         text-decoration: none;
     }
-
-    a:hover {
-        text-decoration: none;
-    }
 </style>
-<div class="jumbotron">
-    Your Token don't share it with anyone<br>
-    {{token}}
+<div class="jumbotron container">
+    <p>Please login to have your token</p>
+    <p>Do not share your token with anyone</p>
+    <p>{{token}}</p>
 </div>
 
-<div class="jumbotron">
-<div class="row">
-    <div class=" col-lg-4">
+<div class="jumbotron container">
+    <div class="row">
+        <div class="col-lg-4">
+            <div style="background-color: red;">
 
-    <a href="{% url 'downloadSoftware' 'telegram' %}">
-        <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
-            <p>Dowload Telegram</p>
-            <p>For windows &darr;</p>
-
+                <a href="{{instagram_url}}">
+                    <div class="btn btn-success" style="display: flex; flex-direction:column;width:max-width">
+                        <p>Dowload Instagram</p>
+                        <p>For windows &darr;</p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </a>
-</div>
+        <div class="col-lg-4">
+            <div style="background-color: blue;">
 
-
-<div class=" col-lg-4">
-
-    <a href="{% url 'downloadSoftware' 'instagram' %}">
-        <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
-            <p>Dowload Instagram</p>
-            <p>For windows &darr;</p>
-
+                <a href="{{whatsapp_url}}">
+                    <div class="btn btn-success" style="display: flex; flex-direction:column;width:max-width">
+                        <p>Dowload Whatsapp</p>
+                        <p>For windows &darr;</p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </a>
-</div>
+        <div class="col-lg-4">
+            <div style="background-color: pink;">
 
-
-<div class=" col-lg-4">
-
-    <a href="{% url 'downloadSoftware' 'whatsapp' %}">
-        <div class="btn btn-success" style="display: flex; flex-direction:column;width:190px">
-            <p>Dowload Whatsapp</p>
-            <p>For windows &darr;</p>
-
+                <a href="{{telegram_url}}">
+                    <div class="btn btn-success" style="display: flex; flex-direction:column;width:max-width">
+                        <p>Dowload Telegram</p>
+                        <p>For windows &darr;</p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </a>
+    </div>
 </div>
-</div>
-</div>
-{% endblock %}
+{% endblock content %}
+
+
+{% block footer %}
+
+<footer>
+
+</footer>
+{#% include "footer.html" %#}
+{% endblock footer %}

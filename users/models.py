@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 import dateutil.relativedelta as delta
 
-
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
@@ -64,16 +63,13 @@ class Profile(models.Model):
         return self.user.__str__()
 
 
-# class NoticeBoard(models.Model):
-#     notice = models.TextField(null=True,blank=True)
-#     def __str__(self):
-#         return self.notice
-
-
 class Base(models.Model):
     def createLicenceExpireDate(self):
         duration = self.duration
-        x = self.date_updated + delta.relativedelta(months=int(duration))
+        if not self.date_updated == None:
+            x = self.date_updated + delta.relativedelta(months=int(duration))
+        else:
+            x = self.DemoDate + delta.relativedelta(months=int(duration))
         return x
 
     def save(self, *args, **kwargs):
@@ -86,57 +82,19 @@ class Base(models.Model):
             except:
                 pass
 
-        # if self.licenceExpireDate < today:
-        #     print("this time isPaid gona be False",self.isPaid)
-        #     self.isPaid = False
-
-        # if self.licenceExpireDate < today:
-        #             print("this time isPaid gona be False",self.isPaid)
-        #             self.isPaid = False
-
-        # if self.isPaid:
-            # try:
-            #     # self.licenceExpireDate.date()
-            #     if self.licenceExpireDate.date() < today:
-            #         print("this time isPaid gona be False",self.isPaid)
-            #         self.isPaid = False
-            # except:
-            #     # self.licenceExpireDate
-            #     if self.licenceExpireDate < today:
-            #         print("this time isPaid gona be False",self.isPaid)
-            #         self.isPaid = False
-
-        #     if not self.confirm_paid:
-        #         self.licenceExpireDate = self.createLicenceExpireDate()
-        #         try:
-        #             self.reseller.token_count -= 1
-        #             self.reseller.sold_token += 1
-        #         except:
-        #             pass
-        #         self.confirm_paid = True
-        # else:
-        #     self.licenceExpireDate = self.DemoDate
         super().save(*args, **kwargs)
 
 
 def save_reseller_token_count(sender, instance, **kwargs):
     if instance.reseller != None:
         instance.reseller.save()
-    # else:
-    #     instance.profile.save()
-
-
-# def get_plan():
-#     return Plan.objects.get(id=1)
 
 
 class Telegram(Base):
     reseller = models.ForeignKey(
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
-    profile = models.ForeignKey(
+    profile = models.OneToOneField(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    # plan = models.ForeignKey(
-    #     Plan, on_delete=models.CASCADE, null=True, blank=True, default=get_plan)
 
     duration = models.IntegerField(default=12)
 
@@ -144,9 +102,7 @@ class Telegram(Base):
     licenceExpireDate = models.DateField(null=True, blank=True)
     isPaid = models.BooleanField(
         default=False, blank=True, help_text='only click when amount is paid')
-    confirm_paid = models.BooleanField(
-        default=False, help_text='do not fill this field')
-    isActive = models.BooleanField(default=True, blank=True)
+    isActive = models.BooleanField(default=True)
     date_updated = models.DateTimeField(auto_now=True)
     ip_address = models.CharField(
         null=True, blank=True, max_length=256, help_text='do not fill this field')
@@ -161,10 +117,8 @@ post_save.connect(save_reseller_token_count, sender=Telegram)
 class Whatsapp(Base):
     reseller = models.ForeignKey(
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
-    profile = models.ForeignKey(
+    profile = models.OneToOneField(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    # plan = models.ForeignKey(
-    #     Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
 
     duration = models.IntegerField(default=12)
 
@@ -172,8 +126,6 @@ class Whatsapp(Base):
     licenceExpireDate = models.DateField(null=True, blank=True)
     isPaid = models.BooleanField(
         default=False, blank=True, help_text='only click when amount is paid')
-    confirm_paid = models.BooleanField(
-        default=False, help_text='do not fill this field')
     isActive = models.BooleanField(default=True, blank=True)
     date_updated = models.DateTimeField(auto_now=True)
     ip_address = models.CharField(
@@ -189,10 +141,8 @@ post_save.connect(save_reseller_token_count, sender=Whatsapp)
 class Instagram(Base):
     reseller = models.ForeignKey(
         Reseller, null=True, blank=True, on_delete=models.CASCADE)
-    profile = models.ForeignKey(
+    profile = models.OneToOneField(
         Profile, null=True, blank=True, on_delete=models.CASCADE)
-    # plan = models.ForeignKey(
-    #     Plan, on_delete=models.CASCADE, null=True, blank=True,default=get_plan)
 
     duration = models.IntegerField(default=12)
 
@@ -200,8 +150,6 @@ class Instagram(Base):
     licenceExpireDate = models.DateField(null=True, blank=True)
     isPaid = models.BooleanField(
         default=False, blank=True, help_text='only click when amount is paid')
-    confirm_paid = models.BooleanField(
-        default=False, help_text='do not fill this field')
     isActive = models.BooleanField(default=True, blank=True)
     date_updated = models.DateTimeField(auto_now=True)
     ip_address = models.CharField(

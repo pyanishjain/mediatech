@@ -1,0 +1,135 @@
+{% include "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container">
+    {% if theObject %}
+    <p><a id="toCsv" class="btn btn-warning">Export to CSV</a></p>
+    <h3>Filter Results</h3>
+
+    <!-- {% include "dashboard_table.html" %} -->
+    <table class="table">
+        <thead class="text-center">
+            <tr>
+                <th>Token</th>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>demoDate</th>
+                <th>isPaid</th>
+                <th>Licence Expire Date</th>
+                <th>Phone No</th>
+                <th>isActive</th>
+                <th>date_updated</th>
+                {% if request.user.is_staff %}
+                <th>Reseller</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <thead class="text-center">
+            {% for var in theObject %}
+            <tr class="result">
+
+                {% if var.profile.token %}
+                <td>
+                    {{var.profile.token}}
+                </td>
+                {% else %}
+                <td>{{var.token}}</td>
+                {% endif %}
+
+
+                {% if var.profile.user.username %}
+                <td style="color: #007bff; cursor: pointer;"><a id="uid-{{var.id}}"
+                        onclick="makeUpdateUrl('{{var.id}}')">{{var.profile.user.username}}</a></td>
+                {% else %}
+                <td><a>{{var.user.username}}</a></td>
+                {% endif %}
+
+
+                {% if var.profile.unhash_password %}
+                <td>{{var.profile.unhash_password}}</td>
+                {% else %}
+                <td>{{var.unhash_password}}</td>
+                {% endif %}
+
+                <td>{{var.DemoDate}}</td>
+                <td>{{var.isPaid}}</td>
+                <td>{{var.licenceExpireDate}}</td>
+                {% if var.profile.phoneNo %}
+                <td>{{var.profile.phoneNo}}</td>
+                {% else %}
+                <td>{{var.phoneNo}}</td>
+                {% endif %}
+                <td>{{var.isActive}}</td>
+                <td>{{var.date_updated}}</td>
+
+                {% if request.user.is_staff %}
+                {% if var.profile.reseller %}
+                <td>{{var.profile.reseller}}</td>
+                {% else %}
+                <td>{{var.reseller}}</td>
+                {% endif %}
+                {% endif %}
+
+
+
+            </tr>
+            {% endfor %}
+        </thead>
+    </table>
+
+
+
+    {% else %}
+    <p>No Such Results Found!</p>
+
+
+
+    {% endif %}
+</div>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/table_to_cookie.js' %}"></script>
+{% endblock javascript %}
+
+<script>
+    var updateUrl = document.getElementById('updateUrl');
+    var base = window.location.href.split("?")
+    var api = base[0].split("/")[4]
+    var theObject = "{{theObject}}"
+
+
+
+    function makeUpdateUrl(id) {
+        var targetUpdate = document.getElementById(`uid-${id}`)
+        var url = '/update/' + id + '/' + api
+
+        targetUpdate.setAttribute('href', url)
+
+    }
+    var t = document.getElementsByClassName('table')[0]
+    t.setAttribute('id', `tableData-${api}`)
+    saveTableDataToCookie(api)
+    var base_url = "/exportToCSV/";
+
+    toCsv.addEventListener('click', function () {
+
+        saveTableDataToCookie(api)
+        console.log(api)
+        var url = base_url + api
+        console.log(url)
+        toCsv.setAttribute('href', url)
+    })
+
+
+
+
+</script>

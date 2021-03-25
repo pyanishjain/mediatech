@@ -11,23 +11,31 @@ urlpatterns = [
     path("", views.index, name='index'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-
     path("signup", views.signup, name='signup'),
-    path('profile', views.profileList.as_view(), name='profile'),
-    path("updateWithTokenProfile", views.updateWithTokenProfile,
-         name='updateWithTokenProfile'),
-    path("downloadSoftware/<str:name>",
-         views.downloadSoftware, name='downloadSoftware'),
-    path("plan_detail/", views.plan_detail, name="plan_detail"),
+
+    #     path('profile', views.profileList.as_view(), name='profile'),
+    #     path("updateWithTokenProfile", views.updateWithTokenProfile,
+    #          name='updateWithTokenProfile'),\
+    #     path("downloadSoftware/<str:name>",
+    #          views.downloadSoftware, name='downloadSoftware'),
+    #     path("plan_detail/", views.plan_detail, name="plan_detail"),
+    #     path("updateSoftware/", views.updateSoftware, name='updateSoftware'),
+    #     path("login_user/", views.login_user, name="login_user"),
+
+
     path("contact/", views.contact, name="contact"),
 
-    path("updateSoftware/", views.updateSoftware, name='updateSoftware'),
-    path("login_user/", views.login_user, name="login_user"),
+
+
+    # For Admin and Reselle Only
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("filterDashboard/<str:api>",
+         views.filterDashboard, name="filterDashboard"),
+
     path("update/<int:id>/<str:api>", views.update, name="update"),
     path("exportToCSV/<str:api>", views.exportToCSV, name="exportToCSV"),
 
-    # AIPS
+    # APIS
     path("createIP/<str:api>", views.createIP, name='createIP'),
     path("serverDateAPI/", views.serverDateAPI, name="serverDateAPI"),
     path("IpAPI/<str:api>", views.IpAPI, name="IpAPI"),
@@ -35,12 +43,7 @@ urlpatterns = [
     path('telegramAPI/', views.telegramAPI, name='telegramAPI'),
     path('whatsappAPI/', views.whatsappAPI, name='whatsappAPI'),
     path('instagramAPI/', views.instagramAPI, name='instagramAPI'),
-
     path('variableAPI/<str:api>', views.variableAPI, name='variableAPI'),
-
-
-
-
 
 
 
@@ -65,7 +68,5 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(
              template_name="accounts/password_reset_done.html"),
          name="password_reset_complete"),
-
 ]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

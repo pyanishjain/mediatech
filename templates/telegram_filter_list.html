@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <form method="get">
+        <!-- <p>{{ filter.form.isActive.label }}
+            {{ filter.form.isActive }}</p>
+
+        <p>{{ filter.form.isPaid.label }}
+            {{ filter.form.isPaid }}</p> -->
+
+        {{filter.form.as_p}}
+
+
+        <input type="submit" />
+    </form>
+
+
+    {% include "dashboard_table.html" %}
+    <tbody>
+
+        {% for var in filter.qs %}
+        <tr>
+            <td>{{var.profile.token}}</td>
+            <td>{{var.profile.user}}</td>
+            <td>{{var.profile.unhash_password}}</td>
+            <td>{{var.DemoDate}}</td>
+            <td>{{var.isPaid}}</td>
+            <td>{{var.licenceExpireDate}}</td>
+            <td>{{var.profile.phoneNo}}</td>
+            <td>{{var.isActive}}</td>
+            <td>{{var.date_updated}}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+    </table>
+
+
+
+
+
+</div>
+{% endblock %}

@@ -40,6 +40,8 @@
         <input class="btn btn-success" type="submit" value="login" />
         <p><a href="{% url 'signup' %}">don't have an account signup</a></p>
         <input type="hidden" name="next" value="{{ next }}" />
+
+        <!-- <p><a href="{% url 'reset_password' %}">Forget Password</a></p> -->
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf #}

@@ -25,21 +25,12 @@ class UserProfileForm(forms.ModelForm):
         fields = ('phoneNo',)
 
 
-class PlanForm(forms.ModelForm):
-    plan = forms.ModelChoiceField(queryset=Plan.objects.all())
+class ResellerForm(forms.ModelForm):
+    reseller = forms.ModelChoiceField(queryset=Reseller.objects.all())
 
     class Meta:
-        model = Plan
-        fields = ('plan',)
-
-
-class UserForm(forms.ModelForm):
-    username = forms.CharField(max_length=10)
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    class Meta():
-        model = User
-        fields = ('username', 'password')
+        model = Reseller
+        fields = ('reseller',)
 
 
 class TelegramForm(forms.ModelForm):
@@ -97,3 +88,19 @@ class InstagramForm(forms.ModelForm):
         super(InstagramForm, self).__init__(*args, **kwargs)
         if isPaid_check:
             del self.fields['isPaid']
+
+
+# class PlanForm(forms.ModelForm):
+#     plan = forms.ModelChoiceField(queryset=Plan.objects.all(), disabled=True)
+
+#     class Meta:
+#         model = Plan
+#         fields = ('plan',)
+
+# class UserForm(forms.ModelForm):
+#     username = forms.CharField(max_length=10)
+#     password = forms.CharField(widget=forms.PasswordInput())
+
+#     class Meta():
+#         model = User
+#         fields = ('username', 'password')
